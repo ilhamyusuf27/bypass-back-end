@@ -35,7 +35,23 @@ const addedDetailUsers = (
   });
 };
 
+const getAllDataUser = () => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM detailuser JOIN registeruser ON detailuser.id_user = registeruser.id`,
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   getDetailUSer,
   addedDetailUsers,
+  getAllDataUser,
 };
