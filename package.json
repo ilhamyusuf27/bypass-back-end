@@ -17,8 +17,17 @@
   "engines": { 
     "node": "16.13.2"
   },
- "scripts": {
-    "start": "node index.js"
-  }
-
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilhamyusuf27/bypass-back-end.git"
+  },
+  "author": "Bypass-Team",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ilhamyusuf27/bypass-back-end/issues"
+  },
+  "homepage": "https://github.com/ilhamyusuf27/bypass-back-end#readme"
 }
