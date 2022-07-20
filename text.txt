@@ -1,0 +1,11 @@
+PORT = 8010
+USER = wachid29
+HOST = localhost
+DATABASE = project_bypass
+PASSWORD = pasword
+PORT2 = 5432
+
+DB_URI = postgres://gsgvyzybtvtejw:dc0f14fdf1b8dc3ffe4c85b9d22d27f1b9c9454febe01169ab8b35bec5b12049@ec2-44-198-82-71.compute-1.amazonaws.com:5432/d5qd1v148si48i
+URL_API = http://localhost:8010
+
+SECRET_CODE = bf067373cf107a04ffee8df4173b5964dd9525a184628e4a8d67a8c71b1d57b1ß

@@ -9,6 +9,7 @@ const getUsers = async (req, res) => {
       .status(200)
       .json({ user: getData?.rows, jumlahData: getData?.rowCount });
   } catch (error) {
+    console.log("err", error);
     res.status(400).send("ada yang error");
   }
 };

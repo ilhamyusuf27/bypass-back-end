@@ -44,6 +44,7 @@ app.use("*", (req, res) => {
   res.send("sukses");
 });
 
-app.listen(port, () => {
-  console.log(`Fighting!!`);
+app.listen(port, (err) => {
+  if (err) throw err;
+  console.log("fighting", port);
 });
