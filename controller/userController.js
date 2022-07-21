@@ -6,9 +6,12 @@ require("dotenv").config();
 const getUsers = async (req, res) => {
   try {
     const getData = await model.getAllUSer();
-    res
-      .status(200)
-      .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+    res.status(200).json({
+      user: getData?.rows.map((e) => {
+        return { ...e, password: null };
+      }),
+      jumlahData: getData?.rowCount,
+    });
   } catch (error) {
     console.log("err", error);
     res.status(400).send("ada yang error");

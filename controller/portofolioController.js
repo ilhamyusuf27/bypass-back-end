@@ -67,8 +67,26 @@ const deletePortofolio = async (req, res) => {
   }
 };
 
+const findByIdUser = async (req, res) => {
+  //cari berdasarkan name
+  try {
+    const { id_user } = req.query;
+    const getData = await model.findbyIdUser(id_user);
+    if (getData?.rowCount) {
+      res
+        .status(200)
+        .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    res.status(400).send("ada yang error");
+  }
+};
+
 module.exports = {
   getPortofolio,
   addPortofolio,
   deletePortofolio,
+  findByIdUser,
 };

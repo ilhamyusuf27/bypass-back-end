@@ -4,7 +4,7 @@ const upload = require("../middleware/upload");
 
 Router.get("/user", controller.getUsers);
 Router.post("/user/add", controller.addUsers);
-Router.put("/user/editPhoto", upload.uploadprofile, controller.editPhoto);
+Router.patch("/user/editPhoto", upload.uploadprofile, controller.editPhoto);
 Router.get("/user/findByID", controller.findUserByID);
 Router.get("/user/findByEmail", controller.findUserByEmail);
 Router.delete("/user/delete", controller.deleteUser);

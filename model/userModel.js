@@ -113,6 +113,22 @@ const deletedUser = (id) => {
   });
 };
 
+const findbyIdUSer = (id_user) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM registeruser WHERE id_user=$1`,
+      [id_user],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   getAllUSer,
   findByEmail,
@@ -121,4 +137,5 @@ module.exports = {
   editedPhoto,
   deletedUser,
   editedUser,
+  findbyIdUSer,
 };
