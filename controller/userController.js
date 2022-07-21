@@ -58,15 +58,14 @@ const editPhoto = async (req, res) => {
     const findbyID = await model.findbyID(id);
     if (findbyID?.rowCount) {
       if (req?.file) {
-        // const uploadImage = await cloudinary.uploader.upload(req.file.path, {
-        //   folder: "user-bypass",
-        // });
+        const uploadImage = await cloudinary.uploader.upload(req.file.path, {
+          folder: "user-bypass",
+        });
         const { id } = req.body;
-        res.send(id);
-        // const foto = uploadImage.secure_url;
-        // const editedPhoto = await model.editedPhoto(foto, id);
+        const foto = uploadImage.secure_url;
+        const editedPhoto = await model.editedPhoto(foto, id);
 
-        // res.status(200).send(`photo profile berhasil di edit`);
+        res.status(200).send(`photo profile berhasil di edit`);
       } else {
         res.status(400).send("silakan pilih file yang akan diupload");
       }
