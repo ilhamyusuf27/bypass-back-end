@@ -1,6 +1,40 @@
-const model = require('../model/companyModel');
-const bcrypt = require("bcrypt");
-const path = require("path");
+const model = require('../model/companyModel')
+const path = require('path')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
+
+const login = async (req, res) => {
+  try {
+    const { recruiter_email, recruiter_password } = req.body
+    // console.log(req.body)
+    const getEmailCompany = await model.getCompanyByEmail(recruiter_email)
+
+    if (getEmailCompany.rowCount) {
+      // validate password
+      const checkPassword = bcrypt.compareSync(
+        recruiter_password,
+        getEmailCompany.rows[0].recruiter_password
+      ) // true or false
+
+      if (checkPassword) {
+        const token = jwt.sign(
+          getEmailCompany.rows[0],
+          process.env.SECRET_KEY,
+          { expiresIn: '1h' }
+        )
+
+        res.status(200).send(token)
+      } else {
+        res.status(401).send('Invalid password!')
+      }
+    } else {
+      res.status(400).send('User not register!')
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(400).send('Something went wrong!')
+  }
+}
 
 const getAllCompany = async (req, res) => {
   try {
@@ -9,7 +43,7 @@ const getAllCompany = async (req, res) => {
     res.send({ data: getData.rows, jumlahData: getData.rowCount })
   } catch (error) {
     console.log('error', error)
-    res.status(400).send(`Something's wrong`)
+    res.status(400).send('Something\'s wrong')
   }
 }
 
@@ -24,11 +58,10 @@ const getCompanyById = async (req, res) => {
       } else {
         res.status(400).send('Invalid number!')
       }
-    } else 
-      res.status(400).send('Recruiter id not found!')
+    } else { res.status(400).send('Recruiter id not found!') }
   } catch (error) {
     console.log('error', error)
-    res.status(400).send(`Something's wrong`)
+    res.status(400).send('Something\'s wrong')
   }
 }
 
@@ -42,7 +75,7 @@ const getCompanyByName = async (req, res) => {
       jumlahData: getData.rowCount
     })
   } catch (error) {
-    res.status(400).send(`Something's wrong`)
+    res.status(400).send('Something\'s wrong')
   }
 }
 
@@ -56,68 +89,68 @@ const getCompanyByEmail = async (req, res) => {
         data: getData.rows,
         jumlahData: getData.rowCount
       })
-    } else 
-      res.status(400).send('Recruiter Email not found!')
-
+    } else { res.status(400).send('Recruiter Email not found!') }
   } catch (error) {
-    console.log("error",error)
-    res.status(400).send(`Something's wrong`)
+    console.log('error', error)
+    res.status(400).send('Something\'s wrong')
   }
 }
 
-const addCompany = async (req, res) => {
+const registerCompany = async (req, res) => {
   try {
-    const { recruiter_name, recruiter_email, recruiter_password, recruiter_phone, recruiter_photo, position } = req.body;
+    const { recruiter_name, recruiter_email, company_name, recruiter_position, recruiter_phone, recruiter_password } = req.body
     const dataEmail = await model.getCompanyByEmail(recruiter_email)
 
-    const salt = bcrypt.genSaltSync(15); // generate random string
-    const hash = bcrypt.hashSync(recruiter_password, salt); // hash password
-     
-    if ( dataEmail.rowCount > 0) {
-      res.status(409).send(`Error : Duplicate recruiter email!`)
+    const salt = bcrypt.genSaltSync(15) // generate random string
+    const hash = bcrypt.hashSync(recruiter_password, salt) // hash password
+
+    if (dataEmail.rowCount > 0) {
+      res.status(409).send('Error : Duplicate recruiter email!')
     } else {
-      await model.addCompany({ recruiter_name, recruiter_email, recruiter_password: hash, recruiter_phone, recruiter_photo, position })
-      res.status(200).send(`Success create user`)
+      await model.addCompany({ recruiter_name, recruiter_email, company_name, recruiter_position, recruiter_phone, recruiter_password: hash })
+      res.status(200).send(`Success create user ${recruiter_name}`)
     }
   } catch (error) {
     console.log('error', error)
-    res.status(400).send(`Something's wrong`)
+    res.status(400).send('Something\'s wrong')
   }
 }
 
-// const editUser = async (req, res) => {
-//   try {
-//     const { user_id, name, email, password, phone, } = req.body
-//     const dataEmail = await model.getByEmail(email)
-
-//     if ( dataEmail.rowCount > 0) {
-//       res.status(409).send(`duplicate email`)
-//     } else {
-//       const getdata = await model.editUser({user_id, name, email, password, phone, user_photo: req.file.path})
-//       res.status(200).send(`Success edit user id ${user_id}`)
-//     }
-//   } catch (error) {
-//     console.log(error)
-//     res.status(400).send('ada yang error')
-//   }
-// }  
-
 const editCompany = async (req, res) => {
   try {
-    const { recruiter_id, recruiter_name, recruiter_email, recruiter_password, recruiter_phone, recruiter_photo, position } = req.body
+    const { recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin } = req.body
     const dataEmail = await model.getCompanyByEmail(recruiter_email)
 
-    const salt = bcrypt.genSaltSync(15); // generate random string
-    const hash = bcrypt.hashSync(recruiter_password, salt); // hash password
-
-    if ( dataEmail.rowCount > 0) {
-      res.status(409).send(`duplicate recruiter email`)
+    if (dataEmail.rowCount > 0) {
+      res.status(409).send('duplicate recruiter email')
     } else {
-      await model.editCompany({recruiter_name, recruiter_email, recruiter_password: hash, recruiter_phone, recruiter_photo, position})
+      await model.editCompany({ recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin })
       res.status(200).send(`Success edit user id ${recruiter_id}`)
     }
   } catch (error) {
     console.log(error)
+    res.status(400).send('Something went wrong!')
+  }
+}
+
+const editPhotoCompany = async (req, res) => {
+  try {
+    const { recruiter_id } = req.body
+    if (req?.file) {
+      const recruiter_photo = req?.file?.path
+      const getCompanyById = await model.getCompanyById(recruiter_id)
+
+      if (getCompanyById?.rowCount) {
+        await model.editPhotoCompany(recruiter_photo, recruiter_id)
+        res.status(200).send('Company photo successfully edited')
+      } else {
+        res.status(400).send('Error: Recruiter_id not registered!')
+      }
+    } else {
+      res.status(400).send('Please select the file to upload!')
+    }
+  } catch (error) {
+    console.log('err', error)
     res.status(400).send('Something went wrong!')
   }
 }
@@ -147,11 +180,13 @@ const deleteCompany = async (req, res) => {
 }
 
 module.exports = {
+  login,
   getAllCompany,
   getCompanyById,
   getCompanyByName,
   getCompanyByEmail,
-  addCompany,
+  registerCompany,
   editCompany,
+  editPhotoCompany,
   deleteCompany
 }
