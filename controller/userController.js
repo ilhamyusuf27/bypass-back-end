@@ -87,9 +87,12 @@ const findUserByID = async (req, res) => {
     const { id } = req.query;
     const getData = await model.findbyID(id);
     if (getData?.rowCount) {
-      res
-        .status(200)
-        .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+      res.status(200).json({
+        user: getData?.rows.map((e) => {
+          return { ...e, password: null };
+        }),
+        jumlahData: getData?.rowCount,
+      });
     } else {
       res.status(400).send("data tidak ditemukan");
     }
@@ -104,9 +107,12 @@ const findUserByEmail = async (req, res) => {
     const { email } = req.query;
     const getData = await model.findByEmail(email);
     if (getData?.rowCount) {
-      res
-        .status(200)
-        .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+      res.status(200).json({
+        user: getData?.rows.map((e) => {
+          return { ...e, password: null };
+        }),
+        jumlahData: getData?.rowCount,
+      });
     } else {
       res.status(400).send("data tidak ditemukan");
     }
