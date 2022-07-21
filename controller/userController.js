@@ -1,3 +1,4 @@
+const cloudinary = require("../middleware/cloudinary");
 const model = require("../model/userModel");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
@@ -53,19 +54,23 @@ const addUsers = async (req, res) => {
 const editPhoto = async (req, res) => {
   try {
     const { id } = req.body;
-    if (req?.file) {
-      const foto = `${process.env.URL_API}/profiles/${req.file.filename}`;
-      const findbyID = await model.findbyID(id);
 
-      if (findbyID?.rowCount) {
+    const findbyID = await model.findbyID(id);
+    if (findbyID?.rowCount) {
+      if (req?.file) {
+        const uploadImage = await cloudinary.uploader.upload(req.file.path, {
+          folder: "user-bypass",
+        });
+        const { id } = req.body;
+        const foto = uploadImage.secure_url;
         const editedPhoto = await model.editedPhoto(foto, id);
 
         res.status(200).send(`photo profile berhasil di edit`);
       } else {
-        res.status(400).send("id belum terdaftar");
+        res.status(400).send("silakan pilih file yang akan diupload");
       }
     } else {
-      res.status(400).send("silakan pilih file yang akan diupload");
+      res.status(400).send("id belum terdaftar");
     }
   } catch (error) {
     console.log("err", error);

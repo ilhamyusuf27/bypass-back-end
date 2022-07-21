@@ -1,3 +1,4 @@
+const cloudinary = require("../middleware/cloudinary");
 const model = require("../model/portofolioModel");
 require("dotenv").config();
 
@@ -16,15 +17,18 @@ const getPortofolio = async (req, res) => {
 
 const addPortofolio = async (req, res) => {
   try {
-    if (req?.file) {
-      const image = `${process.env.URL_API}/images/${req.file.filename}`;
+    const { id_user, aplication_title, link_repository, portofolio_type } =
+      req.body;
+    if (!(id_user && aplication_title && link_repository && portofolio_type)) {
+      res.status(400).send("data tidak boleh kosong");
+    } else {
       const { id_user, aplication_title, link_repository, portofolio_type } =
         req.body;
-      if (
-        !(id_user && aplication_title && link_repository && portofolio_type)
-      ) {
-        res.status(400).send("data tidak boleh kosong");
-      } else {
+      if (req?.file) {
+        const uploadImage = await cloudinary.uploader.upload(req.file.path, {
+          folder: "portofolio",
+        });
+        const image = uploadImage.secure_url;
         const fixaplication_title = aplication_title.trim();
         const fixlink_repository = link_repository.trim();
         const fixportofolio_type = portofolio_type.trim();
@@ -37,9 +41,9 @@ const addPortofolio = async (req, res) => {
           image
         );
         res.status(200).send("data berhasil di tambah");
+      } else {
+        res.status(401).send("silahkan pilih file yang akan diupload");
       }
-    } else {
-      res.status(401).send("silahkan pilih file yang akan diupload");
     }
   } catch (error) {
     res.status(400).send("ada yang error");
