@@ -12,7 +12,7 @@ Router.patch('/company/edit', controller.editCompany) // EDIT COMPANY
 Router.patch('/company/editPhoto', upload.uploadCompany, controller.editPhotoCompany) // EDIT PHOTO COMPANY
 Router.delete('/company/delete', controller.deleteCompany) // DELETE COMPANY
 
-Router.post('/login', controller.login) // LOGIN
+Router.post('/company/login', controller.login) // LOGIN
 Router.post('/company/add', controller.registerCompany) // REGISTER COMPANY
 
 module.exports = Router
