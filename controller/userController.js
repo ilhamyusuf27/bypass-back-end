@@ -1,0 +1,180 @@
+const model = require("../model/userModel");
+const bcrypt = require("bcryptjs");
+require("dotenv").config();
+
+const getUsers = async (req, res) => {
+  try {
+    const getData = await model.getAllUSer();
+    res
+      .status(200)
+      .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+  } catch (error) {
+    console.log("err", error);
+    res.status(400).send("ada yang error");
+  }
+};
+
+const addUsers = async (req, res) => {
+  try {
+    const { name, email, phone_number, password, confirm_pass } = req.body;
+    if (!(name && email && phone_number && password && confirm_pass)) {
+      res.status(400).send("data tidak boleh kosong");
+    } else {
+      const fixname = name.toLowerCase().trim();
+      const fixemail = email.trim();
+      const fixphone_number = phone_number.trim();
+
+      const findEmail = await model.findByEmail(fixemail);
+
+      if (findEmail?.rowCount) {
+        res.status(400).send("email sudah terdaftar");
+      } else {
+        if (password === confirm_pass) {
+          const salt = bcrypt.genSaltSync(5); // generate random string
+          const fixPassword = bcrypt.hashSync(password, salt); // hash password
+
+          const postData = await model.addedUser(
+            fixname,
+            fixemail,
+            fixphone_number,
+            fixPassword
+          );
+          res.status(200).send("data berhasil di tambah");
+        } else {
+          res.status(400).send("password dan confirm password tidak sesuai");
+        }
+      }
+    }
+  } catch (error) {
+    res.status(400).send("ada yang error");
+  }
+};
+
+const editPhoto = async (req, res) => {
+  try {
+    const { id } = req.body;
+    if (req?.file) {
+      const foto = `${process.env.URL_API}/profiles/${req.file.filename}`;
+      const findbyID = await model.findbyID(id);
+
+      if (findbyID?.rowCount) {
+        const editedPhoto = await model.editedPhoto(foto, id);
+
+        res.status(200).send(`photo profile berhasil di edit`);
+      } else {
+        res.status(400).send("id belum terdaftar");
+      }
+    } else {
+      res.status(400).send("silakan pilih file yang akan diupload");
+    }
+  } catch (error) {
+    console.log("err", error);
+    res.status(400).send("ada yang error");
+  }
+};
+
+const findUserByID = async (req, res) => {
+  //cari berdasarkan name
+  try {
+    const { id } = req.query;
+    const getData = await model.findbyID(id);
+    if (getData?.rowCount) {
+      res
+        .status(200)
+        .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    res.status(400).send("ada yang error");
+  }
+};
+
+const findUserByEmail = async (req, res) => {
+  //cari berdasarkan name
+  try {
+    const { email } = req.query;
+    const getData = await model.findByEmail(email);
+    if (getData?.rowCount) {
+      res
+        .status(200)
+        .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    res.status(400).send("ada yang error");
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    const getData = await model.findbyID(id);
+    if (getData?.rowCount) {
+      //const { id } = req.body;
+      const deleteData = await model.deletedUser(id);
+      res.send(`data id ke-${id} berhasil dihapus`);
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    res.status(400).send("ada yang error");
+  }
+};
+
+const editUser = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const findEmail = await model.findByEmail(email);
+    if (findEmail?.rowCount) {
+      res.status(400).send("email sudah terdaftar");
+    } else {
+      const { id, name, email, phone_number, role, is_hired } = req.body;
+
+      const getData = await model.findbyID(id);
+      if (getData?.rowCount) {
+        let inputName = name || getData?.rows[0].name;
+        let inputEmail = email || getData?.rows[0].email;
+        let inputPhone = phone_number || getData?.rows[0].phone_number;
+        let inputRole = role || getData?.rows[0].role;
+        let inputIs_hired = is_hired || getData?.rows[0].is_hired;
+
+        let massage = "";
+        if (name) massage += "name, ";
+        if (email) massage += "email, ";
+        if (phone_number) massage += "phone_number, ";
+        if (role) massage += "role, ";
+        if (is_hired) massage += "is_hired, ";
+
+        const patchData = await model.editedUser(
+          inputName,
+          inputEmail,
+          inputPhone,
+          inputRole,
+          inputIs_hired,
+          id
+        );
+        res.status(200).send(`${massage}berhasil di edit`);
+      } else {
+        res.status(400).send("data tidak ditemukan");
+      }
+    }
+  } catch (error) {
+    console.log("err", error);
+    //console.log(fixname, fixemail, fixphone_number);
+    res.status(400).send("ada yang error");
+  }
+};
+
+module.exports = {
+  getUsers,
+  addUsers,
+  editPhoto,
+  findUserByID,
+  findUserByEmail,
+  deleteUser,
+  editUser,
+};
