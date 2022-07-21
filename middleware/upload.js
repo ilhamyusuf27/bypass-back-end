@@ -25,7 +25,7 @@ const uploadSingle = (req, res, next) => {
 
 const uploadprofile = (req, res, next) => {
   const uploadSingle = multerUtils.single("profile");
-
+  res.send("berhasil masuk multer");
   uploadSingle(req, res, (err) => {
     try {
       if (err instanceof multer.MulterError) {
@@ -68,5 +68,5 @@ const uploadCompany = (req, res, next) => {
 module.exports = {
   uploadSingle,
   uploadprofile,
-  uploadCompany
+  uploadCompany,
 };
