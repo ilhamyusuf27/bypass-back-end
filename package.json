@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.0",
     "dotenv": "^16.0.1",
@@ -11,23 +10,7 @@
     "nodemon": "^2.0.19",
     "pg": "^8.7.3"
   },
-    "name": "bypass-back-end",
-  "version": "1.0.0",
-  "main": "index.js",
-  "engines": { 
-    "node": "16.13.2"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ilhamyusuf27/bypass-back-end.git"
-  },
-  "author": "Bypass-Team",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ilhamyusuf27/bypass-back-end/issues"
-  },
-  "homepage": "https://github.com/ilhamyusuf27/bypass-back-end#readme"
+    "start": "node index.js"
+  }
 }
