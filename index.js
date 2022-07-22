@@ -4,6 +4,7 @@ require("dotenv").config();
 const port = process.env.PORT || 8010;
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
+const cors = require("cors");
 
 // const { options } = require("pg/lib/defaults");
 const authRoutes = require("./routes/authRoutes");
@@ -32,15 +33,16 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use("/profiles", express.static("profiles"));
 app.use("/images", express.static(`images`));
+app.use("/company", express.static(`company`));
 // Define all routes
-app.use("/", companyRoutes);
-app.use("/", authRoutes);
-app.use("/", userRoutes);
-app.use("/", detailUserRoutes);
-app.use("/", skillRoutes);
-app.use("/", sosmedRoutes);
-app.use("/", portofolioRoutes);
-app.use("/", jobExperienceRoutes);
+app.use("/", cors(corsOptions), companyRoutes);
+app.use("/", cors(corsOptions), authRoutes);
+app.use("/", cors(corsOptions), userRoutes);
+app.use("/", cors(corsOptions), detailUserRoutes);
+app.use("/", cors(corsOptions), skillRoutes);
+app.use("/", cors(corsOptions), sosmedRoutes);
+app.use("/", cors(corsOptions), portofolioRoutes);
+app.use("/", cors(corsOptions), jobExperienceRoutes);
 
 app.use("*", (req, res) => {
   res.send("sukses");
