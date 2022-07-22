@@ -38,7 +38,7 @@ const addedDetailUsers = (
 const getAllDataUser = () => {
   return new Promise((resolve, reject) => {
     db.query(
-      `SELECT * FROM detailuser JOIN registeruser ON detailuser.id_user = registeruser.id`,
+      `SELECT * FROM detailuser INNER JOIN registeruser ON detailuser.id_user = registeruser.id`,
       (error, result) => {
         if (error) {
           reject(error);
@@ -82,9 +82,27 @@ const getProfileUser = () => {
   });
 };
 
+const getDataByID = (id) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM detailuser INNER JOIN registeruser ON detailuser.id_user = registeruser.id WHERE registeruser.id =$1`,
+      [id],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   getDetailUSer,
   addedDetailUsers,
   getAllDataUser,
   findbyIdUser,
+  getProfileUser,
+  getDataByID,
 };
