@@ -14,11 +14,12 @@ const sosmedRoutes = require("./routes/sosmedRoutes");
 const portofolioRoutes = require("./routes/portofolioRoutes");
 const jobExperienceRoutes = require("./routes/jobExperienceRoutes");
 const companyRoutes = require("./routes/companyRoutes")
+const hireRouter = require("./routes/hireRoutes")
 
-// const corsOptions = {
-//   origin: "http://localhost:3000",
-//   // origin: "https://belajar-react-wachid.web.app",
-// };
+const corsOptions = {
+  origin: "http://localhost:3000",
+  // origin: "https://belajar-react-wachid.web.app",
+};
 
 app.use(
   helmet({
@@ -41,6 +42,7 @@ app.use("/", skillRoutes);
 app.use("/", sosmedRoutes);
 app.use("/", portofolioRoutes);
 app.use("/", jobExperienceRoutes);
+app.use("/", hireRouter);
 
 app.use("*", (req, res) => {
   res.send("sukses");
