@@ -13,12 +13,12 @@ const skillRoutes = require("./routes/skillRoutes");
 const sosmedRoutes = require("./routes/sosmedRoutes");
 const portofolioRoutes = require("./routes/portofolioRoutes");
 const jobExperienceRoutes = require("./routes/jobExperienceRoutes");
-const companyRoutes = require("./routes/companyRoutes")
+const companyRoutes = require("./routes/companyRoutes");
 
-// const corsOptions = {
-//   origin: "http://localhost:3000",
-//   // origin: "https://belajar-react-wachid.web.app",
-// };
+const corsOptions = {
+  origin: "http://localhost:3000",
+  // origin: "https://belajar-react-wachid.web.app",
+};
 
 app.use(
   helmet({
@@ -33,7 +33,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/profiles", express.static("profiles"));
 app.use("/images", express.static(`images`));
 // Define all routes
-app.use("/", companyRoutes)
+app.use("/", companyRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
 app.use("/", detailUserRoutes);
