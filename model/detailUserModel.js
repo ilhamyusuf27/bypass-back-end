@@ -66,6 +66,22 @@ const findbyIdUser = (id_user) => {
   });
 };
 
+const getProfileUser = () => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM detailuser JOIN registeruser ON detailuser.id_user = registeruser.id  JOIN skill
+  ON registeruser.id = skill.id_user`,
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   getDetailUSer,
   addedDetailUsers,

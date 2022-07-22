@@ -4,4 +4,5 @@ Router.get("/detailUser", controller.getDetailUsers);
 Router.post("/detailUser/add", controller.addDetailUsers);
 Router.get("/getAllData", controller.getAllData);
 Router.get("/detailUser/findByIdUser", controller.findByIdUser);
+Router.get("/getAllProfile", controller.getAllProfile);
 module.exports = Router;

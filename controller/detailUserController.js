@@ -68,9 +68,25 @@ const findByIdUser = async (req, res) => {
   }
 };
 
+const getAllProfile = async (req, res) => {
+  try {
+    const getData = await model.getProfileUser();
+    res.status(200).json({
+      allData: getData?.rows.map((e) => {
+        return { ...e, password: null };
+      }),
+      jumlahData: getData?.rowCount,
+    });
+  } catch (error) {
+    console.log("err", error);
+    res.status(400).send("ada yang error");
+  }
+};
+
 module.exports = {
   getDetailUsers,
   addDetailUsers,
   getAllData,
   findByIdUser,
+  getAllProfile,
 };
