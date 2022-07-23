@@ -10,4 +10,5 @@ Router.get("/getAllProfile/findByName", controller.getProfileByName);
 Router.get("/getAllProfile/findByAddress", controller.getProfileByAddress);
 Router.get("/getAllProfile/fulltime", controller.getProfileFulltime);
 Router.get("/getAllProfile/freelance", controller.getProfileFreelance);
+Router.patch("/detailUser/update", controller.updateDetailUser);
 module.exports = Router;
