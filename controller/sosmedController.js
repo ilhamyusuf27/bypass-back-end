@@ -24,7 +24,15 @@ const addSosmed = async (req, res) => {
 				const fixgitlab = gitlab.trim();
 
 				const postData = await model.addedSosmed(id_user, fixinstagram, fixgithub, fixgitlab);
-				res.status(200).send("data berhasil di tambah");
+				res.status(200).send({
+					msg: "data berhasil di tambah",
+					data: {
+						id_user,
+						instagram,
+						github,
+						gitlab,
+					},
+				});
 			}
 		}
 	} catch (error) {
