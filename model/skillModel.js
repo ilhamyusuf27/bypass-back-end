@@ -1,5 +1,4 @@
 const db = require("../db");
-const controller = require("../controller/skillController");
 
 const getAllSkill = () => {
   return new Promise((resolve, reject) => {

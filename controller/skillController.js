@@ -7,6 +7,7 @@ const getSkill = async (req, res) => {
       .status(200)
       .json({ skill: getData?.rows, jumlahData: getData?.rowCount });
   } catch (error) {
+    console.log(error);
     res.status(400).send("ada yang error");
   }
 };
