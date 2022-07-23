@@ -33,10 +33,12 @@ const getHireById = async (req, res) => {
 
 const addHire = async (req, res) => {
     try {
-      const { hire_message, hire_name, hire_email, hire_phone, hire_description } = req.body
+      const { hire_message, hire_name, hire_email, hire_phone, hire_description, id, recruiter_id } = req.body
       
-        await model.addHire({ hire_message, hire_name, hire_email, hire_phone, hire_description })
-        res.status(200).send(`Success hire`)    
+      const data = await model.addHire({ hire_message, hire_name, hire_email, hire_phone, hire_description, id, recruiter_id })
+        res.status(200).send({message: 'berhasil hire', data : {
+          hire_message, hire_name, hire_email,hire_phone,hire_description, id, recruiter_id
+        }})    
     } catch (error) {
       console.log('error', error)
       res.status(400).send("Something's wrong")

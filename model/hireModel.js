@@ -31,8 +31,8 @@ const getHireById = (id) => {
 const addHire = (props) => {
     return new Promise((resolve, reject) => {
       db.query(
-        'INSERT INTO hire (hire_message, hire_name, hire_email, hire_phone, hire_description) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-        [props.hire_message, props.hire_name, props.hire_email, props.hire_phone, props.hire_description],
+        'INSERT INTO hire (hire_message, hire_name, hire_email, hire_phone, hire_description, id, recruiter_id) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
+        [props.hire_message, props.hire_name, props.hire_email, props.hire_phone, props.hire_description, props.id, props.recruiter_id],
         (error, result) => {
           if (error) {
             reject(error)

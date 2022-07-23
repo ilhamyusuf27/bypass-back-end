@@ -50,7 +50,7 @@ const getAllCompany = async (req, res) => {
 
 const getCompanyById = async (req, res) => {
   try {
-    const { recruiter_id } = req.body;
+    const { recruiter_id } = req.query;
     const getData = await model.getCompanyById(recruiter_id);
 
     if (getData.rowCount > 0) {
@@ -70,7 +70,7 @@ const getCompanyById = async (req, res) => {
 
 const getCompanyByName = async (req, res) => {
   try {
-    const { recruiter_name } = req.body;
+    const { recruiter_name } = req.query;
     const getData = await model.getCompanyByName(recruiter_name);
 
     res.send({
@@ -78,13 +78,14 @@ const getCompanyByName = async (req, res) => {
       jumlahData: getData.rowCount,
     });
   } catch (error) {
+    console.log("error", error)
     res.status(400).send("Something's wrong");
   }
 };
 
 const getCompanyByEmail = async (req, res) => {
   try {
-    const { recruiter_email } = req.body;
+    const { recruiter_email } = req.query;
     const getData = await model.getCompanyByEmail(recruiter_email);
 
     if (getData.rowCount > 0) {
@@ -137,17 +138,7 @@ const registerCompany = async (req, res) => {
 
 const editCompany = async (req, res) => {
   try {
-    const {
-      recruiter_id,
-      company_name,
-      business_fields,
-      company_city,
-      company_description,
-      recruiter_email,
-      company_instagram,
-      recruiter_phone,
-      company_linkedin,
-    } = req.body;
+    const { recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin } = req.body;
     const dataEmail = await model.getCompanyByEmail(recruiter_email);
 
     if (dataEmail.rowCount > 0) {
@@ -200,7 +191,7 @@ const editPhotoCompany = async (req, res) => {
 
 const deleteCompany = async (req, res) => {
   try {
-    const { recruiter_id } = req.body;
+    const { recruiter_id } = req.query;
 
     // Check user by id
     const getData = await model.getCompanyById(recruiter_id);

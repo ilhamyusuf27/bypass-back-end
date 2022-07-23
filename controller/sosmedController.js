@@ -34,9 +34,27 @@ const addSosmed = async (req, res) => {
   }
 };
 
+const editSosmed = async (req, res) => {
+  try {
+    const { id, id_user, instagram, github, gitlab } = req.body;
+    const dataSosmed = await model.editSosmed(id_user, instagram, github, gitlab);
+
+    if (dataSosmed.rowCount > 0) {
+      res.status(409).send("duplicate sosmed");
+    } else {
+      await model.editSosmed({ id, id_user, instagram, github, gitlab });
+      res.status(200).send(`Success edit sosmed ${id}`);
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(400).send("Something went wrong!");
+  }
+};
+
+
 const deleteSosmed = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.query;
 
     const getData = await model.findbyID(id);
     if (getData?.rowCount) {
@@ -54,5 +72,6 @@ const deleteSosmed = async (req, res) => {
 module.exports = {
   getSosmed,
   addSosmed,
+  editSosmed,
   deleteSosmed,
 };
