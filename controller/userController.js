@@ -24,7 +24,7 @@ const addUsers = async (req, res) => {
     if (!(name && email && phone_number && password && confirm_pass)) {
       res.status(400).send("data tidak boleh kosong");
     } else {
-      const fixname = name.toLowerCase().trim();
+      const fixname = name.trim();
       const fixemail = email.trim();
       const fixphone_number = phone_number.trim();
 

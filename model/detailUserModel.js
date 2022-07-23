@@ -66,22 +66,6 @@ const findbyIdUser = (id_user) => {
   });
 };
 
-const getProfileUser = () => {
-  return new Promise((resolve, reject) => {
-    db.query(
-      `SELECT * FROM detailuser JOIN registeruser ON detailuser.id_user = registeruser.id  JOIN skill
-  ON registeruser.id = skill.id_user`,
-      (error, result) => {
-        if (error) {
-          reject(error);
-        } else {
-          resolve(result);
-        }
-      }
-    );
-  });
-};
-
 const getDataByID = (id) => {
   return new Promise((resolve, reject) => {
     db.query(
@@ -98,11 +82,61 @@ const getDataByID = (id) => {
   });
 };
 
+const getDataByName = (name) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM detailuser INNER JOIN registeruser ON detailuser.id_user = registeruser.id WHERE registeruser.name ~* $1`,
+      [name],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
+const getDataByAddress = (address) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM detailuser INNER JOIN registeruser ON detailuser.id_user = registeruser.id WHERE detailuser.address ~* $1`,
+      [address],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
+const getDataByJob_type = (job_type) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM detailuser INNER JOIN registeruser ON detailuser.id_user = registeruser.id WHERE detailuser.job_type ~* $1`,
+      [job_type],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   getDetailUSer,
   addedDetailUsers,
   getAllDataUser,
   findbyIdUser,
-  getProfileUser,
   getDataByID,
+  getDataByName,
+  getDataByAddress,
+  getDataByJob_type,
 };

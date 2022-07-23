@@ -3,7 +3,7 @@ const model = require("../model/skillModel");
 const getSkill = async (req, res) => {
   try {
     const getData = await model.getAllSkill();
-    res
+    return res
       .status(200)
       .json({ skill: getData?.rows, jumlahData: getData?.rowCount });
   } catch (error) {
