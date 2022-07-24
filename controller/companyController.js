@@ -139,14 +139,43 @@ const registerCompany = async (req, res) => {
 const editCompany = async (req, res) => {
   try {
     const { recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin } = req.body;
-    const dataEmail = await model.getCompanyByEmail(recruiter_email);
+    const getData = await model.getAllCompany(recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin);
 
-    if (dataEmail.rowCount > 0) {
-      res.status(409).send("duplicate recruiter email");
-    } else {
-      await model.editCompany({ recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin });
-      res.status(200).send(`Success edit user id ${recruiter_id}`);
-    }
+    // if (dataEmail.rowCount > 0) {
+    //   res.status(409).send("duplicate recruiter email");
+    // } else {
+    //   await model.editCompany({ recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin });
+    //   res.status(200).send(`Success edit user id ${recruiter_id}`);
+    // }
+
+    if (getData?.rowCount) {
+			let changeName = company_name || getData.rows[0].company_name;
+			let changeBusinessFields = business_fields || getData.rows[0].business_fields;
+			let changeCompanyCity = company_city || getData.rows[0].company_city;
+      let changeCompanyDescription = company_description || getData.rows[0].company_description;
+      let changeCompanyEmail = recruiter_email || getData.rows[0].recruiter_email;
+      let changeCompanyInstagram = company_linkedin || getData.rows[0].company_linkedin;
+      let changeCompanyPhone = recruiter_phone || getData.rows[0].recruiter_phone;
+      let changeCompanyLinkedIn = company_linkedin || getData.rows[0].company_linkedin;
+
+			await model.editCompany({ recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin });
+			res.status(200).json({
+				message: `Company ${recruiter_id} was successfully updated`,
+				data_change: {
+					company_name : changeName,
+					business_fields : changeBusinessFields,
+					company_city : changeCompanyCity,
+          company_description : changeCompanyDescription,
+          recruiter_email : changeCompanyEmail,
+          company_instagram : changeCompanyInstagram,
+          recruiter_phone : changeCompanyPhone,
+          company_linkedin : changeCompanyLinkedIn,
+				},
+			});
+		} else {
+			res.status(400).send("data tidak ditemukan");
+		}
+
   } catch (error) {
     console.log(error);
     res.status(400).send("Something went wrong!");
