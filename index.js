@@ -14,12 +14,15 @@ const skillRoutes = require("./routes/skillRoutes");
 const sosmedRoutes = require("./routes/sosmedRoutes");
 const portofolioRoutes = require("./routes/portofolioRoutes");
 const jobExperienceRoutes = require("./routes/jobExperienceRoutes");
-const companyRoutes = require("./routes/companyRoutes");
+const companyRoutes = require("./routes/companyRoutes")
+const hireRouter = require("./routes/hireRoutes")
 
 const corsOptions = {
 	origin: "http://localhost:3000",
 	// origin: "https://belajar-react-wachid.web.app",
 };
+
+// app.use(cors())
 
 app.use(
 	helmet({

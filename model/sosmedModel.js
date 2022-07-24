@@ -29,6 +29,22 @@ const addedSosmed = (id_user, fixinstagram, fixgithub, fixgitlab) => {
 	});
 };
 
+const editSosmed = (props) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      'UPDATE socialmedia SET id_user = $1, instagram = $2, github = $3, gitlab = $4 WHERE id = $5',
+      [props.id_user, props.instagram, props.github, props.gitlab, props.id],
+      (error, result) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve(result)
+        }
+      }
+    )
+  })
+}
+
 const deletedSosmed = (id) => {
 	return new Promise((resolve, reject) => {
 		db.query(`DELETE FROM socialmedia WHERE id=$1`, [id], (error, result) => {
