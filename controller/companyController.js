@@ -40,8 +40,13 @@ const login = async (req, res) => {
 const getAllCompany = async (req, res) => {
   try {
     const getData = await model.getAllCompany();
-
-    res.send({ data: getData.rows, jumlahData: getData.rowCount });
+    
+    res.status(200).json({ 
+      company: getData?.rows.map((e) => {
+        return { ...e, recruiter_password: null };
+      }),
+      jumlahData: getData?.rowCount,
+    });
   } catch (error) {
     console.log("error", error);
     res.status(400).send("Something's wrong");
@@ -55,7 +60,12 @@ const getCompanyById = async (req, res) => {
 
     if (getData.rowCount > 0) {
       if (parseInt(recruiter_id)) {
-        res.send({ data: getData.rows, jumlahData: getData.rowCount });
+        res.status(200).json({ 
+          company: getData?.rows.map((e) => {
+            return { ...e, recruiter_password: null };
+          }),
+          jumlahData: getData?.rowCount,
+        });
       } else {
         res.status(400).send("Invalid number!");
       }
@@ -73,9 +83,11 @@ const getCompanyByName = async (req, res) => {
     const { recruiter_name } = req.query;
     const getData = await model.getCompanyByName(recruiter_name);
 
-    res.send({
-      data: getData.rows,
-      jumlahData: getData.rowCount,
+    res.status(200).json({ 
+      company: getData?.rows.map((e) => {
+        return { ...e, recruiter_password: null };
+      }),
+      jumlahData: getData?.rowCount,
     });
   } catch (error) {
     console.log("error", error)
@@ -89,9 +101,11 @@ const getCompanyByEmail = async (req, res) => {
     const getData = await model.getCompanyByEmail(recruiter_email);
 
     if (getData.rowCount > 0) {
-      res.send({
-        data: getData.rows,
-        jumlahData: getData.rowCount,
+      res.status(200).json({ 
+        company: getData?.rows.map((e) => {
+          return { ...e, recruiter_password: null };
+        }),
+        jumlahData: getData?.rowCount,
       });
     } else {
       res.status(400).send("Recruiter Email not found!");
@@ -104,14 +118,7 @@ const getCompanyByEmail = async (req, res) => {
 
 const registerCompany = async (req, res) => {
   try {
-    const {
-      recruiter_name,
-      recruiter_email,
-      company_name,
-      recruiter_position,
-      recruiter_phone,
-      recruiter_password,
-    } = req.body;
+    const { recruiter_name, recruiter_email, company_name, recruiter_position, recruiter_phone, recruiter_password } = req.body;
     const dataEmail = await model.getCompanyByEmail(recruiter_email);
 
     const salt = bcrypt.genSaltSync(15); // generate random string
@@ -120,14 +127,7 @@ const registerCompany = async (req, res) => {
     if (dataEmail.rowCount > 0) {
       res.status(409).send("Error : Duplicate recruiter email!");
     } else {
-      await model.addCompany({
-        recruiter_name,
-        recruiter_email,
-        company_name,
-        recruiter_position,
-        recruiter_phone,
-        recruiter_password: hash,
-      });
+      await model.addCompany({ recruiter_name, recruiter_email, company_name, recruiter_position, recruiter_phone, recruiter_password: hash });
       res.status(200).send(`Success create user ${recruiter_name}`);
     }
   } catch (error) {
@@ -144,17 +144,7 @@ const editCompany = async (req, res) => {
     if (dataEmail.rowCount > 0) {
       res.status(409).send("duplicate recruiter email");
     } else {
-      await model.editCompany({
-        recruiter_id,
-        company_name,
-        business_fields,
-        company_city,
-        company_description,
-        recruiter_email,
-        company_instagram,
-        recruiter_phone,
-        company_linkedin,
-      });
+      await model.editCompany({ recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin });
       res.status(200).send(`Success edit user id ${recruiter_id}`);
     }
   } catch (error) {
@@ -192,8 +182,6 @@ const editPhotoCompany = async (req, res) => {
 const deleteCompany = async (req, res) => {
   try {
     const { recruiter_id } = req.query;
-
-    // Check user by id
     const getData = await model.getCompanyById(recruiter_id);
 
     if (getData.rowCount > 0) {

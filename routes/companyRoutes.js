@@ -1,5 +1,5 @@
 const Router = require('express').Router()
-const controller = require('../controllers/companyController')
+const controller = require('../controller/companyController')
 const middleware = require('../middleware/verifyToken')
 const upload = require('../middleware/upload')
 

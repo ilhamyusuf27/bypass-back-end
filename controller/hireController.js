@@ -36,9 +36,7 @@ const addHire = async (req, res) => {
       const { hire_message, hire_name, hire_email, hire_phone, hire_description, id, recruiter_id } = req.body
       
       const data = await model.addHire({ hire_message, hire_name, hire_email, hire_phone, hire_description, id, recruiter_id })
-        res.status(200).send({message: 'berhasil hire', data : {
-          hire_message, hire_name, hire_email,hire_phone,hire_description, id, recruiter_id
-        }})    
+        res.status(200).send({message: 'berhasil hire', data : {hire_message, hire_name, hire_email,hire_phone,hire_description, id, recruiter_id}})    
     } catch (error) {
       console.log('error', error)
       res.status(400).send("Something's wrong")
