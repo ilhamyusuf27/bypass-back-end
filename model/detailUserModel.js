@@ -100,6 +100,7 @@ const getDataByJob_type = (job_type) => {
 		});
 	});
 };
+
 const updateDetailUser = (props) => {
 	const { id_user, changeJobTitle, changeAddress, changeJob_type, changeDescription, changeTempatKerja } = props;
 	return new Promise((resolve, reject) => {
@@ -157,6 +158,18 @@ const findbyID = (id) => {
 	});
 };
 
+const getDataByJobtitle = (job_title) => {
+	return new Promise((resolve, reject) => {
+		db.query(`SELECT * FROM detailuser INNER JOIN registeruser ON detailuser.id_user = registeruser.id WHERE detailuser.job_title ~* $1`, [job_title], (error, result) => {
+			if (error) {
+				reject(error);
+			} else {
+				resolve(result);
+			}
+		});
+	});
+};
+
 module.exports = {
 	getDetailUSer,
 	addedDetailUsers,
@@ -170,4 +183,5 @@ module.exports = {
 	getDataSkill,
 	deletedDetail,
 	findbyID,
+	getDataByJobtitle,
 };
