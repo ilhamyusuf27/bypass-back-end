@@ -13,4 +13,6 @@ Router.get("/getAllProfile/freelance", controller.getProfileFreelance);
 Router.patch("/detailUser/update", controller.updateDetailUser);
 Router.get("/getAllProfile/findBySkill", controller.getProfileBySkill);
 Router.delete("/detailUser/delete", controller.deleteDetail);
+Router.get("/getAllProfile/findByJobtitle", controller.getProfileByJobtitle);
+
 module.exports = Router;

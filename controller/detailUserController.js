@@ -275,6 +275,27 @@ const deleteDetail = async (req, res) => {
   }
 };
 
+const getProfileByJobtitle = async (req, res) => {
+  try {
+    const { job_title } = req.query;
+    const getData = await model.getDataByJobtitle(job_title);
+    if (getData?.rowCount) {
+      const profile = await Promise.all(
+        getData.rows.map(async (e) => {
+          const data = await modelSkill.findbyIdUser(e.id);
+          return { ...e, skill: data.rows };
+        })
+      );
+      res.send({ profile });
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    console.log("err", error);
+    res.status(400).send("ada yang error");
+  }
+};
+
 module.exports = {
   getDetailUsers,
   addDetailUsers,
@@ -289,4 +310,5 @@ module.exports = {
   updateDetailUser,
   getProfileBySkill,
   deleteDetail,
+  getProfileByJobtitle,
 };
