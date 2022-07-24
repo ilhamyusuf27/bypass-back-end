@@ -123,7 +123,7 @@ const findUserByEmail = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.query;
 
     const getData = await model.findbyID(id);
     if (getData?.rowCount) {
