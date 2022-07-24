@@ -21,7 +21,6 @@ if (process.env.ENV_MODE === "prod") {
 	});
 }
 
-console.log(connection)
 connection.connect(function (err) {
 	if (err) console.log("error", err);
 });

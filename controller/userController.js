@@ -1,3 +1,4 @@
+const cloudinary = require("../middleware/cloudinary");
 const model = require("../model/userModel");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
@@ -5,9 +6,12 @@ require("dotenv").config();
 const getUsers = async (req, res) => {
   try {
     const getData = await model.getAllUSer();
-    res
-      .status(200)
-      .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+    res.status(200).json({
+      user: getData?.rows.map((e) => {
+        return { ...e, password: null };
+      }),
+      jumlahData: getData?.rowCount,
+    });
   } catch (error) {
     console.log("err", error);
     res.status(400).send("ada yang error");
@@ -20,7 +24,7 @@ const addUsers = async (req, res) => {
     if (!(name && email && phone_number && password && confirm_pass)) {
       res.status(400).send("data tidak boleh kosong");
     } else {
-      const fixname = name.toLowerCase().trim();
+      const fixname = name.trim();
       const fixemail = email.trim();
       const fixphone_number = phone_number.trim();
 
@@ -53,19 +57,23 @@ const addUsers = async (req, res) => {
 const editPhoto = async (req, res) => {
   try {
     const { id } = req.body;
-    if (req?.file) {
-      const foto = `${process.env.URL_API}/profiles/${req.file.filename}`;
-      const findbyID = await model.findbyID(id);
 
-      if (findbyID?.rowCount) {
+    const findbyID = await model.findbyID(id);
+    if (findbyID?.rowCount) {
+      if (req?.file) {
+        const uploadImage = await cloudinary.uploader.upload(req.file.path, {
+          folder: "user-bypass",
+        });
+        const { id } = req.body;
+        const foto = uploadImage.secure_url;
         const editedPhoto = await model.editedPhoto(foto, id);
 
         res.status(200).send(`photo profile berhasil di edit`);
       } else {
-        res.status(400).send("id belum terdaftar");
+        res.status(400).send("silakan pilih file yang akan diupload");
       }
     } else {
-      res.status(400).send("silakan pilih file yang akan diupload");
+      res.status(400).send("id belum terdaftar");
     }
   } catch (error) {
     console.log("err", error);
@@ -79,9 +87,12 @@ const findUserByID = async (req, res) => {
     const { id } = req.query;
     const getData = await model.findbyID(id);
     if (getData?.rowCount) {
-      res
-        .status(200)
-        .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+      res.status(200).json({
+        user: getData?.rows.map((e) => {
+          return { ...e, password: null };
+        }),
+        jumlahData: getData?.rowCount,
+      });
     } else {
       res.status(400).send("data tidak ditemukan");
     }
@@ -96,9 +107,12 @@ const findUserByEmail = async (req, res) => {
     const { email } = req.query;
     const getData = await model.findByEmail(email);
     if (getData?.rowCount) {
-      res
-        .status(200)
-        .json({ user: getData?.rows, jumlahData: getData?.rowCount });
+      res.status(200).json({
+        user: getData?.rows.map((e) => {
+          return { ...e, password: null };
+        }),
+        jumlahData: getData?.rowCount,
+      });
     } else {
       res.status(400).send("data tidak ditemukan");
     }
