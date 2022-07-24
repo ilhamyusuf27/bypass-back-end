@@ -17,7 +17,7 @@ const login = async (req, res) => {
 			if (checkPassword) {
 				const token = jwt.sign(getEmailCompany.rows[0], process.env.SECRET_KEY, { expiresIn: "1h" });
 
-				res.status(200).send(token);
+				res.status(200).send({ token, data: { ...getEmailCompany.rows[0], recruiter_password: null } });
 			} else {
 				res.status(401).send("Invalid password!");
 			}
