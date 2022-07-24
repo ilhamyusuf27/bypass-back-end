@@ -20,7 +20,7 @@ const login = async (req, res) => {
       if (checkPassword) {
         const token = jwt.sign(
           getUserByEmail?.rows[0],
-          process.env.SECRET_CODE,
+          process.env.SECRET_KEY,
           { expiresIn: "24h" }
         );
         res.status(200).json({

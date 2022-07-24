@@ -261,7 +261,6 @@ const deleteDetail = async (req, res) => {
     const { id } = req.query;
 
     const getData = await model.findbyID(id);
-    console.log(getData);
     if (getData?.rowCount) {
       //const { id } = req.body;
       const deleteData = await model.deletedDetail(id);
