@@ -65,9 +65,26 @@ const findbyID = (id) => {
   });
 };
 
+const findbyIdUser = (id_user) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM portofolio WHERE id_user=$1`,
+      [id_user],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   getAllPortofolio,
   addedPortofolio,
   deletedPortofolio,
   findbyID,
+  findbyIdUser,
 };
