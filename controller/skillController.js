@@ -19,7 +19,10 @@ const addSkill = async (req, res) => {
       res.status(400).send("data tidak boleh kosong");
     } else {
       const getData = await model.findbyIdUser(id_user);
-      if (getData.rows.map((e) => (e.skill = skill))) {
+      const test = getData.rows.map((e) => e.skill);
+      const test2 = test.filter((e) => e.includes(skill));
+
+      if (test2.length) {
         res.status(400).send("skill sudah terdaftar");
       } else {
         const fixskill = skill.trim();
