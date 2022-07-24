@@ -3,5 +3,6 @@ const controller = require("../controller/sosmedController");
 Router.get("/sosmed", controller.getSosmed);
 Router.post("/sosmed/add", controller.addSosmed);
 Router.delete("/sosmed/delete", controller.deleteSosmed);
-Router.patch("/sosmed/edit", controller.editSosmed);
+Router.get("/sosmed/findByIdUser", controller.findByIdUser);
+Router.patch("/sosmed/update", controller.updateUserSosmed);
 module.exports = Router;

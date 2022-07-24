@@ -53,9 +53,45 @@ const findbyID = (id) => {
   });
 };
 
+const findbyIdUser = (id_user) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      `SELECT * FROM skill WHERE id_user=$1`,
+      [id_user],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
+const updateSkillData = (props) => {
+  console.log(props);
+  const { id_user, id, changesSkill } = props;
+  return new Promise((resolve, reject) => {
+    db.query(
+      `UPDATE skill SET skill=$1 WHERE id_user=$2 AND id=$3`,
+      [changesSkill, id_user, id],
+      (error, result) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
+};
+
 module.exports = {
   getAllSkill,
   addedSkill,
   deletedSkill,
   findbyID,
+  findbyIdUser,
+  updateSkillData,
 };

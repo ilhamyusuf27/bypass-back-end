@@ -11,7 +11,8 @@ const storage = multer.diskStorage({
       callback(null, "./profiles");
     } else if (file.fieldname === "company") {
       callback(null, "./company");
-    }},
+    }
+  },
   filename: (req, file, cb) => {
     return cb(
       null,
