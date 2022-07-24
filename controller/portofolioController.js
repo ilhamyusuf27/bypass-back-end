@@ -52,7 +52,7 @@ const addPortofolio = async (req, res) => {
 
 const deletePortofolio = async (req, res) => {
   try {
-    const { id } = req.body;
+    const { id } = req.query;
 
     const getData = await model.findbyID(id);
     if (getData?.rowCount) {
