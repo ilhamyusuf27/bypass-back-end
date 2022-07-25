@@ -46,6 +46,7 @@ app.use("/", cors(corsOptions), skillRoutes);
 app.use("/", cors(corsOptions), sosmedRoutes);
 app.use("/", cors(corsOptions), portofolioRoutes);
 app.use("/", cors(corsOptions), jobExperienceRoutes);
+app.use("/", cors(corsOptions), hireRouter);
 
 app.use("*", (req, res) => {
   res.send("sukses");

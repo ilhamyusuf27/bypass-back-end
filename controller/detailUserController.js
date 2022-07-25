@@ -14,7 +14,8 @@ const getDetailUsers = async (req, res) => {
 
 const addDetailUsers = async (req, res) => {
   try {
-    const { id_user, job_title, address, job_type, description } = req.body;
+    const { id_user, job_title, address, job_type, description, tempat_kerja } =
+      req.body;
 
     const getData = await model.findbyIdUser(id_user);
 
@@ -197,13 +198,15 @@ const getProfileFreelance = async (req, res) => {
 
 const updateDetailUser = async (req, res) => {
   try {
-    const { id_user, job_title, address, job_type, description } = req.body;
+    const { id_user, job_title, address, job_type, description, tempat_kerja } =
+      req.body;
     const getData = await model.findbyIdUser(id_user);
     if (getData?.rowCount) {
       let changeJobTitle = job_title || getData.rows[0].job_title;
       let changeAddress = address || getData.rows[0].address;
       let changeJob_type = job_type || getData.rows[0].job_type;
       let changeDescription = description || getData.rows[0].description;
+      let changeTempatKerja = tempat_kerja || getData.rows[0].tempat_kerja;
 
       await model.updateDetailUser({
         id_user,
@@ -211,6 +214,7 @@ const updateDetailUser = async (req, res) => {
         changeAddress,
         changeJob_type,
         changeDescription,
+        changeTempatKerja,
       });
       res.send({
         msg: `Detail data dengan user id ${id_user} telah diperbarui!`,
@@ -257,6 +261,7 @@ const deleteDetail = async (req, res) => {
     const { id } = req.query;
 
     const getData = await model.findbyID(id);
+    console.log(getData);
     if (getData?.rowCount) {
       //const { id } = req.body;
       const deleteData = await model.deletedDetail(id);
