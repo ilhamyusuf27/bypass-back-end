@@ -18,8 +18,7 @@ const companyRoutes = require("./routes/companyRoutes");
 const hireRouter = require("./routes/hireRoutes");
 
 const corsOptions = {
-	origin: "https://my-career-32e87.web.app/",
-	// origin: "https://belajar-react-wachid.web.app",
+	origins: "https://my-career-32e87.web.app/",
 };
 
 // app.use(cors())
