@@ -114,24 +114,26 @@ const getCompanyByEmail = async (req, res) => {
 
 const registerCompany = async (req, res) => {
 	try {
-		const { recruiter_id, company_name, business_fields, company_city, company_description, recruiter_email, company_instagram, recruiter_phone, company_linkedin } = req.body;
+		const { recruiter_name, recruiter_email, company_name, recruiter_position, recruiter_phone, recruiter_password, confirm_pass } = req.body;
 		const dataEmail = await model.getCompanyByEmail(recruiter_email);
-
 		if (dataEmail.rowCount > 0) {
-			res.status(409).send("duplicate recruiter email");
+			res.status(409).send("Error : Duplicate recruiter email!");
 		} else {
-			await model.editCompany({
-				recruiter_id,
-				company_name,
-				business_fields,
-				company_city,
-				company_description,
-				recruiter_email,
-				company_instagram,
-				recruiter_phone,
-				company_linkedin,
-			});
-			res.status(200).send(`Success edit user id ${recruiter_id}`);
+			if (recruiter_password === confirm_pass) {
+				const salt = bcrypt.genSaltSync(15); // generate random string
+				const hash = bcrypt.hashSync(recruiter_password, salt); // hash password
+				await model.addCompany({
+					recruiter_name,
+					recruiter_email,
+					company_name,
+					recruiter_position,
+					recruiter_phone,
+					recruiter_password: hash,
+				});
+				res.status(200).send(`Success register user ${recruiter_name}`);
+			} else {
+				res.status(400).send("Password dan confirm password tidak sama!");
+			}
 		}
 	} catch (error) {
 		console.log(error);
