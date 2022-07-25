@@ -14,20 +14,20 @@ const skillRoutes = require("./routes/skillRoutes");
 const sosmedRoutes = require("./routes/sosmedRoutes");
 const portofolioRoutes = require("./routes/portofolioRoutes");
 const jobExperienceRoutes = require("./routes/jobExperienceRoutes");
-const companyRoutes = require("./routes/companyRoutes")
-const hireRouter = require("./routes/hireRoutes")
+const companyRoutes = require("./routes/companyRoutes");
+const hireRouter = require("./routes/hireRoutes");
 
 const corsOptions = {
-	origin: "http://localhost:3000",
-	// origin: "https://belajar-react-wachid.web.app",
+  // origin: "http://localhost:3000",
+  origin: "https://my-career-32e87.web.app/",
 };
 
 // app.use(cors())
 
 app.use(
-	helmet({
-		crossOriginResourcePolicy: false,
-	})
+  helmet({
+    crossOriginResourcePolicy: false,
+  })
 );
 
 app.use(bodyParser.json());
@@ -48,10 +48,10 @@ app.use("/", cors(corsOptions), portofolioRoutes);
 app.use("/", cors(corsOptions), jobExperienceRoutes);
 
 app.use("*", (req, res) => {
-	res.send("sukses");
+  res.send("sukses");
 });
 
 app.listen(port, (err) => {
-	if (err) throw err;
-	console.log("fighting", port);
+  if (err) throw err;
+  console.log("fighting", port);
 });

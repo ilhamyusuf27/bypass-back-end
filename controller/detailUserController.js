@@ -16,37 +16,33 @@ const addDetailUsers = async (req, res) => {
   try {
     const { id_user, job_title, address, job_type, description } = req.body;
 
-    if (!(id_user && job_title && address && job_type && description)) {
-      res.status(400).send("data tidak boleh kosong");
+    const getData = await model.findbyIdUser(id_user);
+
+    if (getData.rowCount) {
+      res.status(400).send("id_user telah terdaftar");
     } else {
-      const getData = await model.findbyIdUser(id_user);
+      const fixjob_title = job_title.trim();
+      const fixaddress = address.trim();
+      const fixjob_type = job_type.trim();
+      const fixdescription = description.trim();
 
-      if (getData.rowCount) {
-        res.status(400).send("id_user telah terdaftar");
-      } else {
-        const fixjob_title = job_title.trim();
-        const fixaddress = address.trim();
-        const fixjob_type = job_type.trim();
-        const fixdescription = description.trim();
-
-        const postData = await model.addedDetailUsers(
+      const postData = await model.addedDetailUsers(
+        id_user,
+        fixjob_title,
+        fixaddress,
+        fixjob_type,
+        fixdescription
+      );
+      res.status(200).send({
+        msg: "data berhasil di tambah",
+        data: {
           id_user,
           fixjob_title,
           fixaddress,
           fixjob_type,
-          fixdescription
-        );
-        res.status(200).send({
-          msg: "data berhasil di tambah",
-          data: {
-            id_user,
-            fixjob_title,
-            fixaddress,
-            fixjob_type,
-            fixdescription,
-          },
-        });
-      }
+          fixdescription,
+        },
+      });
     }
   } catch (error) {
     res.status(400).send("ada yang error");
