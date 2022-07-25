@@ -19,11 +19,11 @@ const addDetailUsers = async (req, res) => {
 		if (getData.rowCount) {
 			res.status(400).send("id_user telah terdaftar");
 		} else {
-			const fixjob_title = job_title.trim();
-			const fixaddress = address.trim();
-			const fixjob_type = job_type.trim();
-			const fixdescription = description.trim();
-			const fixtempat_kerja = tempat_kerja.trim();
+			const fixjob_title = job_title.trim() || null;
+			const fixaddress = address.trim() || null;
+			const fixjob_type = job_type.trim() || null;
+			const fixdescription = description.trim() || null;
+			const fixtempat_kerja = tempat_kerja.trim() || null;
 
 			const postData = await model.addedDetailUsers(id_user, fixjob_title, fixaddress, fixjob_type, fixdescription, fixtempat_kerja);
 			res.status(200).send({

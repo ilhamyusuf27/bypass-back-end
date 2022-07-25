@@ -18,7 +18,7 @@ const companyRoutes = require("./routes/companyRoutes");
 const hireRouter = require("./routes/hireRoutes");
 
 const corsOptions = {
-	origins: "https://my-career-32e87.web.app/",
+	origins: "http://my-career-32e87.web.app/",
 };
 
 // app.use(cors())
