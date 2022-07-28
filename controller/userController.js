@@ -1,5 +1,6 @@
 const cloudinary = require("../middleware/cloudinary");
 const model = require("../model/userModel");
+const modelSkill = require("../model/skillModel");
 const bcrypt = require("bcryptjs");
 require("dotenv").config();
 
@@ -58,16 +59,18 @@ const editPhoto = async (req, res) => {
     const findbyID = await model.findbyID(id);
     if (findbyID?.rowCount) {
       if (req?.file) {
-        const uploadImage = await cloudinary.uploader.upload(req?.file?.path, {
-          folder: "user-bypass",
-        });
+        const uploadImage =
+          (await cloudinary.uploader.upload(req?.file?.path, {
+            folder: "user-bypass",
+          })) || null;
+
         const { id } = req.body;
         const foto = uploadImage.secure_url;
         const editedPhoto = await model.editedPhoto(foto, id);
 
-        res.status(200).send(`photo profile berhasil di edit`);
+        res.status(200).send("photo profile berhasil di edit");
       } else {
-        res.status(400).send("silakan pilih file yang akan diupload");
+        res.status(200).send("photo profile tidak di edit");
       }
     } else {
       res.status(400).send("id belum terdaftar");
@@ -180,6 +183,130 @@ const editUser = async (req, res) => {
   }
 };
 
+const updateDetailUser = async (req, res) => {
+  try {
+    const { id, job_title, address, job_type, description, workplace } =
+      req.body;
+    const getData = await model.findbyID(id);
+    if (getData?.rowCount) {
+      let changeJobTitle = job_title || getData.rows[0].job_title;
+      let changeAddress = address || getData.rows[0].address;
+      let changeJob_type = job_type || getData.rows[0].job_type;
+      let changeDescription = description || getData.rows[0].description;
+      let changeWorkPlace = workplace || getData.rows[0].workplace;
+
+      await model.updateDetailUser({
+        id,
+        changeJobTitle,
+        changeAddress,
+        changeJob_type,
+        changeDescription,
+        changeWorkPlace,
+      });
+      res.send({
+        msg: `Detail data dengan user id ${id} telah diperbarui!`,
+        data: {
+          id,
+          job_title: changeJobTitle,
+          address: changeAddress,
+          job_type: changeJob_type,
+          description: changeDescription,
+          workplace: changeWorkPlace,
+        },
+      });
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    console.log("err", error);
+    res.status(400).send("ada yang error");
+  }
+};
+
+const getProfileByName = async (req, res) => {
+  try {
+    const { name } = req.query;
+    const getData = await model.getDataByName(name);
+    if (getData?.rowCount) {
+      const profile = await Promise.all(
+        getData.rows.map(async (e) => {
+          const data = await modelSkill.findbyIdUser(e.id);
+          return { ...e, skill: data.rows };
+        })
+      );
+      res.send({ profile });
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    console.log("err", error);
+    res.status(400).send("ada yang error");
+  }
+};
+
+const getProfileByAddress = async (req, res) => {
+  try {
+    const { address } = req.query;
+    const getData = await model.getDataByAddress(address);
+    if (getData?.rowCount) {
+      const profile = await Promise.all(
+        getData.rows.map(async (e) => {
+          const data = await modelSkill.findbyIdUser(e.id);
+          return { ...e, skill: data.rows };
+        })
+      );
+      res.send({ profile });
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    console.log("err", error);
+    res.status(400).send("ada yang error");
+  }
+};
+
+const getProfileBySkill = async (req, res) => {
+  try {
+    const { skill } = req.query;
+    const getData = await model.getDataSkill(skill);
+    if (getData?.rowCount) {
+      const profile = await Promise.all(
+        getData.rows.map(async (e) => {
+          const data = await modelSkill.findbyIdUser(e.id_user);
+          return { ...e, Skill: data.rows };
+        })
+      );
+      res.send({ profile });
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    console.log("err", error);
+    res.status(400).send("ada yang error");
+  }
+};
+
+const getProfileByJobtitle = async (req, res) => {
+  try {
+    const { job_title } = req.query;
+    const getData = await model.getDataByJobtitle(job_title);
+    if (getData?.rowCount) {
+      const profile = await Promise.all(
+        getData.rows.map(async (e) => {
+          const data = await modelSkill.findbyIdUser(e.id);
+          return { ...e, skill: data.rows };
+        })
+      );
+      res.send({ profile });
+    } else {
+      res.status(400).send("data tidak ditemukan");
+    }
+  } catch (error) {
+    console.log("err", error);
+    res.status(400).send("ada yang error");
+  }
+};
+
 module.exports = {
   getUsers,
   addUsers,
@@ -188,4 +315,9 @@ module.exports = {
   findUserByEmail,
   deleteUser,
   editUser,
+  updateDetailUser,
+  getProfileByName,
+  getProfileByAddress,
+  getProfileBySkill,
+  getProfileByJobtitle,
 };

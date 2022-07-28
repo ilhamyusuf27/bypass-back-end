@@ -20,7 +20,7 @@ const addSkill = async (req, res) => {
     } else {
       const getData = await model.findbyIdUser(id_user);
       const test = getData.rows.map((e) => e.skill);
-      const test2 = test.filter((e) => e.includes(skill));
+      const test2 = test.filter((e) => e == skill);
 
       if (test2.length) {
         res.status(400).send("skill sudah terdaftar");
