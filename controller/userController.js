@@ -61,7 +61,7 @@ const editPhoto = async (req, res) => {
     const findbyID = await model.findbyID(id);
     if (findbyID?.rowCount) {
       if (req?.file) {
-        const uploadImage = await cloudinary.uploader.upload(req.file.path, {
+        const uploadImage = await cloudinary.uploader.upload(req?.file?.path , {
           folder: "user-bypass",
         });
         const { id } = req.body;
