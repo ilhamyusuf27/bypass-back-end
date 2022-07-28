@@ -21,32 +21,29 @@ const getUsers = async (req, res) => {
 const addUsers = async (req, res) => {
   try {
     const { name, email, phone_number, password, confirm_pass } = req.body;
-    if (!(name && email && phone_number && password && confirm_pass)) {
-      res.status(400).send("data tidak boleh kosong");
+
+    const fixname = name.trim();
+    const fixemail = email.trim();
+    const fixphone_number = phone_number.trim();
+
+    const findEmail = await model.findByEmail(fixemail);
+
+    if (findEmail?.rowCount) {
+      res.status(400).send("email sudah terdaftar");
     } else {
-      const fixname = name.trim();
-      const fixemail = email.trim();
-      const fixphone_number = phone_number.trim();
+      if (password === confirm_pass) {
+        const salt = bcrypt.genSaltSync(5); // generate random string
+        const fixPassword = bcrypt.hashSync(password, salt); // hash password
 
-      const findEmail = await model.findByEmail(fixemail);
-
-      if (findEmail?.rowCount) {
-        res.status(400).send("email sudah terdaftar");
+        const postData = await model.addedUser(
+          fixname,
+          fixemail,
+          fixphone_number,
+          fixPassword
+        );
+        res.status(200).send("data berhasil di tambah");
       } else {
-        if (password === confirm_pass) {
-          const salt = bcrypt.genSaltSync(5); // generate random string
-          const fixPassword = bcrypt.hashSync(password, salt); // hash password
-
-          const postData = await model.addedUser(
-            fixname,
-            fixemail,
-            fixphone_number,
-            fixPassword
-          );
-          res.status(200).send("data berhasil di tambah");
-        } else {
-          res.status(400).send("password dan confirm password tidak sesuai");
-        }
+        res.status(400).send("password dan confirm password tidak sesuai");
       }
     }
   } catch (error) {
@@ -61,7 +58,7 @@ const editPhoto = async (req, res) => {
     const findbyID = await model.findbyID(id);
     if (findbyID?.rowCount) {
       if (req?.file) {
-        const uploadImage = await cloudinary.uploader.upload(req?.file?.path , {
+        const uploadImage = await cloudinary.uploader.upload(req?.file?.path, {
           folder: "user-bypass",
         });
         const { id } = req.body;
