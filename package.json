@@ -1,22 +1,19 @@
 {
-  "name": "back-end",
-  "version": "1.0.0",
-  "description": "Bypass-Back-End",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ilhamyusuf27/bypass-back-end.git"
-  },
-  "author": "Bypass-Team",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/ilhamyusuf27/bypass-back-end/issues"
-  },
-  "homepage": "https://github.com/ilhamyusuf27/bypass-back-end#readme",
   "dependencies": {
-    "express": "^4.18.1"
+    "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.0",
+    "cloudinary": "^1.30.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "helmet": "^5.1.0",
+    "jsonwebtoken": "^8.5.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^2.0.19",
+    "pg": "^8.7.3"
+  },
+  "scripts": {
+    "start": "node index.js"
   }
 }
