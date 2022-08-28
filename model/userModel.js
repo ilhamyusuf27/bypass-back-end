@@ -80,7 +80,7 @@ const editedUser = (inputName, inputEmail, inputPhone, inputRole, inputIs_hired,
 const editDetailUser = (inputName, inputJobTitle, inputAddress, inputJobType, inpuDescription, inputWorkplace, id) => {
 	return new Promise((resolve, reject) => {
 		db.query(
-			`UPDATE registeruser SET name= $1, job_title=$2, job_type=$3, description=$4, workplace=$5, address=$6 WHERE id=$7 RETURNING *`,
+			`UPDATE registeruser SET name= $1, job_title=$2, address=$3, job_type=$4, description=$5, workplace=$6 WHERE id=$7 RETURNING *`,
 			[inputName, inputJobTitle, inputAddress, inputJobType, inpuDescription, inputWorkplace, id],
 			(error, result) => {
 				if (error) {

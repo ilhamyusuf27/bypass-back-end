@@ -173,12 +173,12 @@ const editDetailUser = async (req, res) => {
 
 		const getData = await model.findbyID(id);
 		if (getData?.rowCount) {
-			let inputName = name || getData?.rows[0].name;
-			let inputJobTitle = job_title || getData?.rows[0].job_title;
-			let inputAddress = address || getData?.rows[0].address;
-			let inputJobType = job_type || getData?.rows[0].job_type;
-			let inpuDescription = description || getData?.rows[0].description;
-			let inputWorkplace = workplace || getData?.rows[0].workplace;
+			let inputName = name || getData?.rows[0]?.name;
+			let inputJobTitle = job_title || getData?.rows[0]?.job_title;
+			let inputAddress = address || getData?.rows[0]?.address;
+			let inputJobType = job_type || getData?.rows[0]?.job_type;
+			let inpuDescription = description || getData?.rows[0]?.description;
+			let inputWorkplace = workplace || getData?.rows[0]?.workplace;
 
 			const patchData = await model.editDetailUser(inputName, inputJobTitle, inputAddress, inputJobType, inpuDescription, inputWorkplace, id);
 			res.status(200).send({ message: `${id} berhasil di edit`, result: patchData.rows });
