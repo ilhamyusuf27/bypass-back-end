@@ -67,7 +67,7 @@ const getDataByID = (id) => {
 
 const getDataByName = (name) => {
 	return new Promise((resolve, reject) => {
-		db.query(`SELECT * FROM detailuser FULL OUTER JOIN registeruser ON detailuser.id_user = registeruser.id WHERE registeruser.name ~* $1`, [name], (error, result) => {
+		db.query(`SELECT * FROM registeruser WHERE name ~* $1`, [name], (error, result) => {
 			if (error) {
 				reject(error);
 			} else {

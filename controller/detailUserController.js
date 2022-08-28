@@ -108,9 +108,11 @@ const getProfileByName = async (req, res) => {
 	try {
 		const { name } = req.query;
 		const getData = await model.getDataByName(name);
+		console.log(getData);
 		if (getData?.rowCount) {
 			const profile = await Promise.all(
 				getData.rows.map(async (e) => {
+					console.log(e.id);
 					const data = await modelSkill.findbyIdUser(e.id);
 					return { ...e, skill: data.rows };
 				})
