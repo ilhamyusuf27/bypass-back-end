@@ -55,13 +55,17 @@ const findbyIdUser = (id_user) => {
 
 const getDataByID = (id) => {
 	return new Promise((resolve, reject) => {
-		db.query(`SELECT * FROM detailuser FULL OUTER JOIN registeruser ON detailuser.id_user = registeruser.id WHERE registeruser.id =$1`, [id], (error, result) => {
-			if (error) {
-				reject(error);
-			} else {
-				resolve(result);
+		db.query(
+			`SELECT detailuser.*, registeruser.workplace AS 'tempat_kerja' FROM detailuser FULL OUTER JOIN registeruser ON detailuser.id_user = registeruser.id WHERE registeruser.id =$1`,
+			[id],
+			(error, result) => {
+				if (error) {
+					reject(error);
+				} else {
+					resolve(result);
+				}
 			}
-		});
+		);
 	});
 };
 
