@@ -4,45 +4,42 @@ const path = require("path");
 
 // image storage
 const storage = multer.diskStorage({
-  destination: function (req, file, callback) {
-    if (file.fieldname === "image") {
-      callback(null, "./images");
-    } else if (file.fieldname === "profile") {
-      callback(null, "./profiles");
-    } else if (file.fieldname === "company") {
-      callback(null, "./company");
-    }
-  },
-  filename: (req, file, cb) => {
-    return cb(
-      null,
-      `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`
-    );
-  },
-});
-
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1000000, // 1MB
-  },
-  fileFilter: fileFilter,
+	destination: function (req, file, callback) {
+		if (file.fieldname === "image") {
+			callback(null, "./images");
+		} else if (file.fieldname === "profile") {
+			callback(null, "./profiles");
+		} else if (file.fieldname === "company") {
+			callback(null, "./company");
+		}
+	},
+	filename: (req, file, cb) => {
+		return cb(null, `${file.fieldname}_${Date.now()}${path.extname(file.originalname)}`);
+	},
 });
 
 function fileFilter(req, file, cb) {
-  // Allowed ext
-  const filetypes = /jpeg|jpg|png/;
+	// Allowed ext
+	const filetypes = /jpeg|jpg|png/;
 
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-  // Check mime
-  const mimetype = filetypes.test(file.mimetype);
+	// Check ext
+	const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+	// Check mime
+	const mimetype = filetypes.test(file.mimetype);
 
-  if (mimetype && extname) {
-    return cb(null, true);
-  } else {
-    cb("Error: Images Only!");
-  }
+	if (mimetype && extname) {
+		return cb(null, true);
+	} else {
+		cb(".jpeg, jpg, png Only!");
+	}
 }
+
+const upload = multer({
+	storage: storage,
+	limits: {
+		fileSize: 1000000, // 1MB
+	},
+	fileFilter: fileFilter,
+});
 
 module.exports = upload;

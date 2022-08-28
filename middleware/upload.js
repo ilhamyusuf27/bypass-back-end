@@ -2,70 +2,73 @@ const multer = require("multer");
 const multerUtils = require("../multer");
 
 const uploadSingle = (req, res, next) => {
-  const uploadSingle = multerUtils.single("image");
+	const uploadSingle = multerUtils.single("image");
 
-  uploadSingle(req, res, (err) => {
-    try {
-      if (err instanceof multer.MulterError) {
-        // A Multer error occurred when uploading.
-        res.status(400).send(err?.message ?? "Something went wrong!");
-        return;
-      } else if (err) {
-        // An unknown error occurred when uploading.
-        res.status(400).send(err ?? "Something went wrong!");
-        return;
-      }
+	uploadSingle(req, res, (err) => {
+		try {
+			if (err instanceof multer.MulterError) {
+				// A Multer error occurred when uploading.
+				res.status(400).send(err?.message ?? "Something went wrong!");
+				return;
+			} else if (err) {
+				// An unknown error occurred when uploading.
+				res.status(400).send(err ?? "Something went wrong!");
+				return;
+			}
 
-      next();
-    } catch (error) {
-      res.status(500).send(error?.message ?? "Upload Failed");
-    }
-  });
+			next();
+		} catch (error) {
+			res.status(500).send(error?.message ?? "Upload Failed");
+		}
+	});
 };
 
 const uploadprofile = (req, res, next) => {
-  const uploadSingle = multerUtils.single("profile");
-  uploadSingle(req, res, (err) => {
-    try {
-      if (err instanceof multer.MulterError) {
-        // A Multer error occurred when uploading.
-        res.status(400).send(err?.message ?? "Something went wrong!");
-        return;
-      } else if (err) {
-        // An unknown error occurred when uploading.
-        res.status(400).send(err ?? "Something went wrong!");
-        return;
-      }
-      next();
-    } catch (error) {
-      res.status(500).send(error?.message ?? "Upload Failed");
-    }
-  });
+	const uploadSingle = multerUtils.single("profile");
+	uploadSingle(req, res, (err) => {
+		try {
+			if (err instanceof multer.MulterError) {
+				// A Multer error occurred when uploading.
+				if (err.message === "File too large") {
+					return res.status(400).send("File too large maximum 1mb");
+				}
+				res.status(400).send(err?.message ?? "Something went wrong!");
+				return;
+			} else if (err) {
+				// An unknown error occurred when uploading.
+				res.status(400).send(err ?? "Something went wrong!");
+				return;
+			}
+			next();
+		} catch (error) {
+			res.status(500).send(error?.message ?? "Upload Failed");
+		}
+	});
 };
 
 const uploadCompany = (req, res, next) => {
-  const uploadSingle = multerUtils.single("company");
+	const uploadSingle = multerUtils.single("company");
 
-  uploadSingle(req, res, (err) => {
-    try {
-      if (err instanceof multer.MulterError) {
-        // A Multer error occurred when uploading.
-        res.status(400).send(err?.message ?? "Something went wrong!");
-        return;
-      } else if (err) {
-        // An unknown error occurred when uploading.
-        res.status(400).send(err ?? "Something went wrong!");
-        return;
-      }
-      next();
-    } catch (error) {
-      res.status(500).send(error?.message ?? "Upload Failed");
-    }
-  });
+	uploadSingle(req, res, (err) => {
+		try {
+			if (err instanceof multer.MulterError) {
+				// A Multer error occurred when uploading.
+				res.status(400).send(err?.message ?? "Something went wrong!");
+				return;
+			} else if (err) {
+				// An unknown error occurred when uploading.
+				res.status(400).send(err ?? "Something went wrong!");
+				return;
+			}
+			next();
+		} catch (error) {
+			res.status(500).send(error?.message ?? "Upload Failed");
+		}
+	});
 };
 
 module.exports = {
-  uploadSingle,
-  uploadprofile,
-  uploadCompany,
+	uploadSingle,
+	uploadprofile,
+	uploadCompany,
 };
