@@ -160,7 +160,7 @@ const findbyID = (id) => {
 
 const getDataByJobtitle = (job_title) => {
 	return new Promise((resolve, reject) => {
-		db.query(`SELECT * FROM detailuser FULL OUTER JOIN registeruser ON detailuser.id_user = registeruser.id WHERE detailuser.job_title ~* $1`, [job_title], (error, result) => {
+		db.query(`SELECT * from registeruser WHERE job_title ~* $1`, [job_title], (error, result) => {
 			if (error) {
 				reject(error);
 			} else {
